@@ -1,97 +1,150 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import TextInput from "../components/TextInput.component";
-import SelectDropdown from "../components/SelectDropdown.component";
-import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
-import { errorHandler } from "../utils/errorHandler";
-import ButtonLoader from "../components/ButtonLoader.component";
+import React, { Fragment, useState } from "react";
+import { toast } from "react-toastify";
+import { apiEndpoints } from "../api/apiEndpoints";
+import { postDataWithoutToken } from "../api/axiosApiMethods";
+import { BASE_URL } from "../appConstants";
+import { errorHandler } from "../helpers/errorHandler";
+import ROUTES from "../helpers/Routes";
 
-const Registration = () => {
-  const history = useHistory();
-  const { register, handleSubmit, errors } = useForm();
+export default function Registration() {
   const [loading, setLoading] = useState(false);
-  const onSubmit = handleSubmit(async () => {
-    try {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        history.push("/user");
-      }, 2000);
-    } catch (error) {
-      setLoading(false);
-      Swal.fire("Error", errorHandler(error), "error");
-    }
-  });
-  return (
-    <form onSubmit={onSubmit}>
-      <h1 className="h3 mb-3 font-weight-bold text-center">
-        Please fill in your details
-      </h1>
-      <TextInput
-        placeholder="Email Address"
-        autoFocus
-        type="email"
-        reference={register({ required: true })}
-        errors={errors.email}
-        name="email"
-      />
-      <TextInput
-        placeholder="First Name "
-        type="text"
-        reference={register({ required: true })}
-        errors={errors.first_name}
-        name="first_name"
-      />
-      <TextInput
-        placeholder="Last Name"
-        type="text"
-        reference={register({ required: true })}
-        errors={errors.last_name}
-        name="last_name"
-      />
-      <TextInput
-        placeholder="Middle Name"
-        type="text"
-        reference={register}
-        errors={errors.middle_name}
-        name="middle_name"
-      />
-      <SelectDropdown
-        placeholder="Gender"
-        name="gender"
-        reference={register({ required: true })}
-        errors={errors.gender}
-      >
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </SelectDropdown>
-      <TextInput
-        placeholder="Password"
-        type="password"
-        reference={register({ required: true })}
-        errors={errors.password}
-        name="password"
-      />
-      <TextInput
-        placeholder="Password Again"
-        type="password"
-        reference={register({ required: true })}
-        errors={errors.passwordAgain}
-        name="passwordAgain"
-      />
-      <button
-        className="btn btn-md btn-secondary btn-block"
-        type="submit"
-        disabled={loading}
-      >
-        {loading ? <ButtonLoader /> : "Register"}
-      </button>
-      <h6 className="text-center mt-5">
-        Do you have an account already? <Link to="/login">Login</Link>
-      </h6>
-    </form>
-  );
-};
 
-export default Registration;
+  const [state, setState] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    gender: "",
+    email: "",
+    isGuest: true,
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
+  const onSubmit = async () => {
+    const createdBy = localStorage.getItem("id");
+    console.log("first", createdBy);
+    setLoading(true);
+    const reqBody = {
+      ...state,
+      createdBy: Number(createdBy),
+    };
+
+    try {
+      const res = await postDataWithoutToken(
+        apiEndpoints.registerUrl,
+        reqBody,
+        BASE_URL
+      );
+      // setUserInfo(res.data);
+      console.log(res);
+      toast.success(res.message);
+    } catch (error) {
+      console.log("here", error);
+      setLoading(false);
+      toast.error(errorHandler(error));
+    }
+  };
+  return (
+    <Fragment>
+      <div className="flex mb-4">
+        <div className="w-1/2 mr-1">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            First Name
+          </label>
+          <input
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            name="firstName"
+            type="text"
+            placeholder="Your first name"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+        <div className="w-1/2 ml-1">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Last Name
+          </label>
+          <input
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            type="text"
+            placeholder="Your last name"
+            name="lastName"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+      </div>
+      <div className="flex mb-4">
+        <div className="w-1/2 mr-1">
+          {" "}
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Gender
+          </label>
+          <select
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            type="text"
+            name="gender"
+            placeholder="Gender"
+            onChange={(e) => handleChange(e)}
+          >
+            <option value="">Select Gender</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </div>
+
+        <div className="w-1/2 ml-1">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Phone Number
+          </label>
+          <input
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            id="phoneNumber"
+            name="phoneNumber"
+            type="number"
+            placeholder="Your email address"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+      </div>
+      <div className="mb-4">
+        <div className="w-1/2 mr-1">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Email Address
+          </label>
+          <input
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            type="email"
+            name="email"
+            placeholder="Your email address"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+        <div className="w-1/2 ml-1">
+          {" "}
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Guest
+          </label>
+          <select
+            className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+            type="text"
+            name="isGuest"
+            onChange={(e) => handleChange(e)}
+          >
+            <option value={true}>True</option>
+            <option value={false}>False</option>
+          </select>
+        </div>
+      </div>
+      <div className="flex items-center justify-between mt-8">
+        <button
+          className="hover:bg-cyan-700 bg-cyan-500 text-white font-bold py-2 px-4 rounded-md"
+          type="submit"
+          onClick={onSubmit}
+        >
+          Register
+        </button>
+      </div>
+    </Fragment>
+  );
+}

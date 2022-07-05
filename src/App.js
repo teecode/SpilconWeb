@@ -1,32 +1,24 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./App.css";
-import Homepage from "./pages/Homepage";
-import User from "./pages/User";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AuthRoutesComponent from "./components/AuthRoutes/AuthRoutes.component.jsx";
+import { QueryClient, QueryClientProvider } from "react-query";
+import ROUTES from "./helpers/Routes.js";
+import LandingPage from "./pages/LandingPage.js";
 
 function App() {
+  const queryClient = new QueryClient();
   return (
-    <div className="home">
-      <div className="layout">
-        <Router>
-          <Switch>
-            <Route exact path="/" component={Homepage} />
-            <Route exact path="/forgot-password" component={ForgotPassword} />
-            <Route
-              exact
-              path="/reset-password/:token"
-              component={ResetPassword}
-            />
-            <Route path="/user" component={User} />
-            <Route path="*">
-              <Homepage />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
-    </div>
+    <Router>
+      <QueryClientProvider client={queryClient}>
+        <ToastContainer />
+        <Routes>
+          <Route path={ROUTES.LOGIN} element={<LandingPage />} />
+          <Route path="*" element={<AuthRoutesComponent />} />
+        </Routes>
+      </QueryClientProvider>
+    </Router>
   );
 }
 
