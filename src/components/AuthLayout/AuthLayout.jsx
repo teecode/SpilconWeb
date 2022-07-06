@@ -76,7 +76,7 @@ export default function AuthLayout({ children }) {
           </div>
         </div>
 
-        <div class="w-full h-full p-4 m-8 overflow-y-auto">
+        <div class="w-full h-full overflow-y-auto">
           <div class="px-40 py-20 border-4 border-orange-400 border-dotted">
             {children}
           </div>

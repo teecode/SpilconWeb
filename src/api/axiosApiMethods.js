@@ -2,23 +2,26 @@ import axios from "axios";
 import CONFIG from "../helpers/config";
 
 const token = localStorage.getItem("token");
-const axiosInstance = axios.create();
+console.log("token", token);
+
+const axiosInstance = axios.create({
+  baseURL: CONFIG.BASE_URL,
+});
 
 axiosInstance.interceptors.request.use(
   function (config) {
     config.headers = {
       ...config.headers,
       "Content-Type": "application/json",
-      Authorization: `Token ${token()}`,
+      Authorization: `Token ${token}`,
     };
-    config.baseURL = CONFIG.BASE_URL;
+    // you can also do other modification in config
     return config;
   },
   function (error) {
     return Promise.reject(error);
   }
 );
-
 export const getData = async (url) => {
   try {
     const data = await axiosInstance({

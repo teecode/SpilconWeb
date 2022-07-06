@@ -1,10 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import { apiEndpoints } from "../api/apiEndpoints";
-import { postDataWithoutToken } from "../api/axiosApiMethods";
-import { BASE_URL } from "../appConstants";
+import { postData } from "../api/axiosApiMethods";
 import { errorHandler } from "../helpers/errorHandler";
-import ROUTES from "../helpers/Routes";
 
 export default function Registration() {
   const [loading, setLoading] = useState(false);
@@ -32,11 +30,7 @@ export default function Registration() {
     };
 
     try {
-      const res = await postDataWithoutToken(
-        apiEndpoints.registerUrl,
-        reqBody,
-        BASE_URL
-      );
+      const res = await postData(apiEndpoints.registerUrl, reqBody);
       // setUserInfo(res.data);
       console.log(res);
       toast.success(res.message);
@@ -48,8 +42,8 @@ export default function Registration() {
   };
   return (
     <Fragment>
-      <div className="flex mb-4">
-        <div className="w-1/2 mr-1">
+      <div className="flex flex-col md:flex-row mb:mb-4">
+        <div className="md:w-1/2 md:mr-1 md:mb-0 mb-4">
           <label className="block text-grey-darker text-sm font-bold mb-2">
             First Name
           </label>
@@ -61,7 +55,7 @@ export default function Registration() {
             onChange={(e) => handleChange(e)}
           />
         </div>
-        <div className="w-1/2 ml-1">
+        <div className="md:w-1/2 md:ml-1 md:mb-0 mb-4">
           <label className="block text-grey-darker text-sm font-bold mb-2">
             Last Name
           </label>
@@ -74,8 +68,8 @@ export default function Registration() {
           />
         </div>
       </div>
-      <div className="flex mb-4">
-        <div className="w-1/2 mr-1">
+      <div className="flex flex-col md:flex-row mb-4">
+        <div className="md:w-1/2 md:mr-1 md:mb-0 mb-4">
           {" "}
           <label className="block text-grey-darker text-sm font-bold mb-2">
             Gender
@@ -93,7 +87,7 @@ export default function Registration() {
           </select>
         </div>
 
-        <div className="w-1/2 ml-1">
+        <div className="md:w-1/2 md:ml-1 md:mb-0 mb-4">
           <label className="block text-grey-darker text-sm font-bold mb-2">
             Phone Number
           </label>
@@ -107,8 +101,8 @@ export default function Registration() {
           />
         </div>
       </div>
-      <div className="mb-4">
-        <div className="w-1/2 mr-1">
+      <div className="flex flex-col md:flex-row mb-4">
+        <div className="md:w-1/2 md:mr-1 md:mb-0 mb-4">
           <label className="block text-grey-darker text-sm font-bold mb-2">
             Email Address
           </label>
@@ -120,7 +114,7 @@ export default function Registration() {
             onChange={(e) => handleChange(e)}
           />
         </div>
-        <div className="w-1/2 ml-1">
+        <div className="md:w-1/2 md:ml-1 md:mb-0 mb-4">
           {" "}
           <label className="block text-grey-darker text-sm font-bold mb-2">
             Guest
@@ -136,7 +130,7 @@ export default function Registration() {
           </select>
         </div>
       </div>
-      <div className="flex items-center justify-between mt-8">
+      <div className="flex flex-col md:flex-row items-center justify-between mt-8">
         <button
           className="hover:bg-cyan-700 bg-cyan-500 text-white font-bold py-2 px-4 rounded-md"
           type="submit"
