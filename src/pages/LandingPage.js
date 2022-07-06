@@ -72,7 +72,7 @@ function LandingPage() {
                   disabled={loading || !username || !password}
                   onClick={onSubmit}
                 >
-                  Log {loading && "ing"} In {loading && " ....."}
+                  Log{loading && "ing"} In {loading && " ....."}
                 </button>
               </div>
             </form>

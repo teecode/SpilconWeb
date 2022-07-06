@@ -33,12 +33,9 @@ export default function Registration() {
 
     try {
       const res = await postData(apiEndpoints.registerUrl, reqBody);
-      // setUserInfo(res.data);
-      console.log(res);
       setLoading(false);
       toast.success(res.message);
     } catch (error) {
-      console.log("here", error);
       setLoading(false);
       toast.error(errorHandler(error));
     }
