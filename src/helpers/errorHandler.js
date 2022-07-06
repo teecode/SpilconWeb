@@ -1,5 +1,4 @@
 export const errorHandler = (error) => {
-  console.log("hi");
   if (!error) {
     return "Unable to connect.";
   }
@@ -16,7 +15,6 @@ export const errorHandler = (error) => {
     return "Unable to connect.";
   }
   if (error && error.response) {
-    console.log("use");
     return error.response.data;
   } else if (error.request) {
     return error.request;

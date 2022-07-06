@@ -13,7 +13,7 @@ export default function Registration() {
     phoneNumber: "",
     gender: "",
     email: "",
-    isGuest: true,
+    isGuest: false,
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,10 +22,12 @@ export default function Registration() {
 
   const onSubmit = async () => {
     const createdBy = localStorage.getItem("id");
-    console.log("first", createdBy);
     setLoading(true);
+    const { isGuest } = state;
     const reqBody = {
       ...state,
+      isGuest:
+        isGuest === "true" ? true : isGuest === "false" ? false : isGuest,
       createdBy: Number(createdBy),
     };
 
@@ -33,6 +35,7 @@ export default function Registration() {
       const res = await postData(apiEndpoints.registerUrl, reqBody);
       // setUserInfo(res.data);
       console.log(res);
+      setLoading(false);
       toast.success(res.message);
     } catch (error) {
       console.log("here", error);
@@ -124,6 +127,7 @@ export default function Registration() {
             type="text"
             name="isGuest"
             onChange={(e) => handleChange(e)}
+            value={state.isGuest}
           >
             <option value={true}>True</option>
             <option value={false}>False</option>
@@ -135,8 +139,9 @@ export default function Registration() {
           className="hover:bg-cyan-700 bg-cyan-500 text-white font-bold py-2 px-4 rounded-md"
           type="submit"
           onClick={onSubmit}
+          disabled={loading}
         >
-          Register
+          Register{loading && "ing....."}
         </button>
       </div>
     </Fragment>

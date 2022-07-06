@@ -2,8 +2,6 @@ import axios from "axios";
 import CONFIG from "../helpers/config";
 
 const token = localStorage.getItem("token");
-console.log("token", token);
-
 const axiosInstance = axios.create({
   baseURL: CONFIG.BASE_URL,
 });

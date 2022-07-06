@@ -14,7 +14,6 @@ function LandingPage() {
   const [password, setPassword] = useState("");
 
   const onSubmit = async (e) => {
-    console.log(username, password);
     setLoading(true);
     const reqBody = {
       username: username,
@@ -27,14 +26,11 @@ function LandingPage() {
         reqBody,
         BASE_URL
       );
-      // setUserInfo(res.data);
-      console.log("token", res);
       window.location.replace(ROUTES.REGISTRATION);
       localStorage.setItem("token", res.token);
       localStorage.setItem("id", res.id);
       toast.success("Successfully Logged In");
     } catch (error) {
-      console.log("here", error);
       setLoading(false);
       toast.error(errorHandler(error));
     }
@@ -76,11 +72,7 @@ function LandingPage() {
                   disabled={loading || !username || !password}
                   onClick={onSubmit}
                 >
-                  Log In
-                  <svg
-                    class="animate-spin h-5 w-5 ml-3 ..."
-                    viewBox="0 0 24 24"
-                  ></svg>
+                  Log {loading && "ing"} In {loading && " ....."}
                 </button>
               </div>
             </form>
