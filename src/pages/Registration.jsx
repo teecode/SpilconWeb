@@ -1,11 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { apiEndpoints } from "../api/apiEndpoints";
-import { postData } from "../api/axiosApiMethods";
+import { getData, postData } from "../api/axiosApiMethods";
 import { errorHandler } from "../helpers/errorHandler";
 
 export default function Registration() {
   const [loading, setLoading] = useState(false);
+  const [trt, setTrt] = useState(false);
+  const [tat, setTat] = useState(false);
 
   const [state, setState] = useState({
     firstName: "",
@@ -13,12 +15,28 @@ export default function Registration() {
     phoneNumber: "",
     gender: "",
     email: "",
-    isGuest: false,
+    isGuest: false
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
+
+  useEffect(() =>{
+    
+    const  fetchStatistics = async () => {
+      const regToday =  await getData(apiEndpoints.registrationtoday);
+      setTrt(regToday.count);
+    };
+
+    const  fetchAttendance = async () => {
+      const attToday =  await getData(apiEndpoints.attendancetoday);
+      setTat(attToday.count);
+    };
+
+    fetchStatistics().catch(console.error);
+    fetchAttendance().catch(console.error);
+  }, []);
 
   const onSubmit = async () => {
     const createdBy = localStorage.getItem("id");
@@ -140,6 +158,27 @@ export default function Registration() {
         >
           Register{loading && "ing....."}
         </button>
+      </div>
+
+      <br/>
+      <br />
+      <div className="flex flex-col md:flex-row mb:mb-4">
+        <div className="md:w-1/2 md:mr-1 md:mb-0 mb-4">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Total Registered Today
+          </label>
+          {trt &&<label name= "trt" className="block text-grey-darker text-sm font-bold mb-2">
+            {trt}
+          </label>}
+        </div>
+        <div className="md:w-1/2 md:mr-1 md:mb-0 mb-4">
+          <label className="block text-grey-darker text-sm font-bold mb-2">
+            Total Attendance Today
+          </label>
+          {tat &&<label name= "tat" className="block text-grey-darker text-sm font-bold mb-2">
+            {tat}
+          </label>}
+        </div>
       </div>
     </Fragment>
   );

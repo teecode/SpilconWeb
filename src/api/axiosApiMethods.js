@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
     config.headers = {
       ...config.headers,
       "Content-Type": "application/json",
-      Authorization: `Token ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     // you can also do other modification in config
     return config;
