@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import ROUTES from "../../helpers/Routes";
+import Attendance from "../../pages/Attendance";
 import Registration from "../../pages/Registration";
 import AuthLayout from "../AuthLayout/AuthLayout";
 // import ROUTES from "../../helpers/ROUTES";
@@ -29,6 +30,7 @@ const AuthRoutes = () => {
           <AuthLayout>
             <Routes>
               <Route path={ROUTES.REGISTRATION} element={<Registration />} />
+              <Route path={ROUTES.ATTENDANCE} element={<Attendance />} />
             </Routes>
           </AuthLayout>
         </div>
